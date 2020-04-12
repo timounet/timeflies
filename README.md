@@ -11,6 +11,9 @@ Application that allows to track time to projects. It's about microservices comm
 - [Statistics](./event-statistics/README.md): Each timer is asynchronously sent (via Kafka) to the Statistics microservice. It has a HTML + JQuery UI displaying all the statistics.
 - Prometheus polls metrics from the three microservices
 ## Development requirements
+### Git
+- Branch names convention : [GitFlow names](https://nvie.com/posts/a-successful-git-branching-model/)
+- Feature branches : use Pull Request 
 ### Checking Ports
 In development, we will use several ports. Just make sure the following ports are free so you don’t run into any conflicts
 ````sh
@@ -25,7 +28,7 @@ $ lsof -i tcp:9092    // Kafka
 ````
 ### Software
 #### windows
-Use [chocolatey](https://chocolatey.org/) 
+Use [chocolatey](https://chocolatey.org/) in powershell (admin mode)
 ````batch
 choco install -y `
 curl	 `
@@ -53,24 +56,24 @@ scite
 #### mac OS X
 Use [homebrew](https://brew.sh/) 
 `````shell script
-brew install  -y /
-curl	 /
-dep	 /
-docker	 /
-git	 /
-graalvm-ce-java11	 /
-jq	 /
-kubernetes-cli	 /
-helm	 /
-maven	 /
-node	 /
+brew install  -y \
+curl	 \
+dep	 \
+docker	 \
+git	 \
+graalvm-ce-java11	 \
+jq	 \
+kubernetes-cli	 \
+helm	 \
+maven	 \
+node	 \
 Wget	
 `````
 Recommended tools
 ````shell script
-brew install -y /
-discord	 /
-intellijidea-ce	 /
+brew install -y \
+discord	 \
+intellijidea-ce	 \
 postman	 
 ````
 #### Details
