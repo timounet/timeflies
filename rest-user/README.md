@@ -12,18 +12,29 @@ If you want to learn more about Quarkus, please visit its website: https://quark
 - openapi
 - health 
 - metrics
-## Quarkus Creation
-Created with maven template:
+
+## Bootstrapping the User REST Endpoint
+Created with maven archetype template:
 `````shell script
 mvn io.quarkus:quarkus-maven-plugin:1.3.2.Final:create \
     -DprojectGroupId=org.timeflies \
     -DprojectArtifactId=rest-user \
-    -DclassName="org.timeflies.user.UserResource" \
+    -DclassName="org.timeflies.users.UserResource" \
     -Dpath="api/users" \
     -Dextensions="kotlin,jdbc-postgresql,hibernate-orm-panache,hibernate-validator,resteasy-jsonb,openapi,health,metrics"
 `````
 Or can be imported thanks to [code.quarkus.oi](https://code.quarkus.oi)
 ![Quarkus Project Generator](../doc/rest-user-quarkus-extension.png)
+
+## Directory Structure
+
+The Maven archetype generates the following rest-user sub-directory:
+- the Maven structure with a pom.xml
+- an org.timeflies.users.UserResource resource exposed on /api/users
+- an associated unit test UserResourceTest
+- the landing page index.html that is accessible on http://localhost:8080 after starting the application
+- example Dockerfile files for both native and jvm modes in src/main/docker. Would be replaced by jib later
+- the application.properties configuration file
 
 ## Running the application in dev mode
 
@@ -31,6 +42,21 @@ You can run your application in dev mode that enables live coding using:
 ```
 ./mvnw quarkus:dev
 ```
+Then check that the endpoint returns hello as expected:
+````
+$ curl http://localhost:8080/api/users
+hello
+````
+Alternatively, you can open http://localhost:8080/api/users in your browser
+
+## Transactions and ORM
+   
+The User API’s role is to allow CRUD operations on timeflies users. In this module we will create a User entity and persist/update/delete/retrieve it from a Postgres database in a transactional way.
+You should already have installed the infrastructure into the infrastructure directory. Now, just execute `docker-compose -f docker-compose.yaml up -d`. You should see a few logs going on and then all the containers get started.
+[Infra more info](../infrastructure/README.md)
+
+### User Entity
+To define a Panache entity, simply extend PanacheEntity, annotate it with @Entity and add your columns as public fields (no need to have getters and setters)
 
 ## Packaging and running the application
 
