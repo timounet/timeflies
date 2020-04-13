@@ -7,7 +7,9 @@ services:
             - "5432:5432"
         volumes:
             - ./db-init/initialize-databases.sql:/docker-entrypoint-initdb.d/init.sql
-
+        environment:
+            - "POSTGRES_USER=super"
+            - "POSTGRES_PASSWORD=super"
     monitoring:
         image: "prom/prometheus"
         network_mode: 'host' # On Linux, this is required to let Prometheus access the other containers.
