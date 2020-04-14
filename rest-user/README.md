@@ -139,6 +139,18 @@ Notice also the `@QuarkusTestResource(DatabaseResource.class)`. It is how the Qu
 
 With this code written, execute the test using `./mvnw test`. The test should pass.
 
+## OpenAPI
+Now, you curl http://localhost:8083/openapi endpoint
+The MicroProfile OpenAPI has a set of annotations to customize each REST endpoint method so the OpenAPI contract is richer and clearer for consumers:
+- `@Operation`: Describes a single API operation on a path.
+- `@APIResponse`: Corresponds to the OpenAPI Response model object which describes a single response from an API Operation
+- `@Parameter`: The name of the parameter.
+- `@RequestBody`: A brief description of the request body.
+
+[OpenApi Generator](https://openapi-generator.tech/docs/generators) (for example) propose to generate clients from open api specs in lots of languages
+
+## Swagger UI 
+When building APIs, developers want to test them quickly. Swagger UI is a great tool permitting to visualize and interact with APIs. The UI is automatically generated from your OpenAPI specification. The Quarkus smallrye-openapi extension comes with a swagger-ui extension embedding a properly configured Swagger UI page. By default, Swagger UI is accessible at /swagger-ui. So, once your application is started, you can go to http://localhost:8083/swagger-ui and play with API.
 
 ## Packaging and running the application
 

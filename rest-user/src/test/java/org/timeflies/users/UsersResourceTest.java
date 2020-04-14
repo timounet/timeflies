@@ -46,7 +46,7 @@ public class UsersResourceTest {
                 .when().get("/api/users/hello")
                 .then()
                 .statusCode(200)
-                .body(is("hello"));
+                .body(is("hello " + UsersResource.class.getSimpleName()));
     }
 
     @Test
@@ -199,6 +199,23 @@ public class UsersResourceTest {
                 .header(CONTENT_TYPE, APPLICATION_JSON)
                 .extract().body().as(getUsersTypeRef());
         assertEquals(NB_USERS, users.size());
+    }
+
+    @Test
+    void shouldPingOpenAPI() {
+        given()
+                .header(ACCEPT, APPLICATION_JSON)
+                .when().get("/openapi")
+                .then()
+                .statusCode(OK.getStatusCode());
+    }
+
+    @Test
+    void shouldPingSwaggerUI() {
+        given()
+                .when().get("/swagger-ui")
+                .then()
+                .statusCode(OK.getStatusCode());
     }
 
     private TypeRef<List<Users>> getUsersTypeRef() {
