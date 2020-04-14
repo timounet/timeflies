@@ -218,6 +218,31 @@ public class UsersResourceTest {
                 .statusCode(OK.getStatusCode());
     }
 
+    @Test
+    void shouldPingLiveness() {
+        given()
+                .when().get("/health/live")
+                .then()
+                .statusCode(OK.getStatusCode());
+    }
+
+    @Test
+    void shouldPingReadiness() {
+        given()
+                .when().get("/health/ready")
+                .then()
+                .statusCode(OK.getStatusCode());
+    }
+
+    @Test
+    void shouldPingMetrics() {
+        given()
+                .header(ACCEPT, APPLICATION_JSON)
+                .when().get("/metrics/application")
+                .then()
+                .statusCode(OK.getStatusCode());
+    }
+
     private TypeRef<List<Users>> getUsersTypeRef() {
         return new TypeRef<List<Users>>() {
             // Kept empty on purpose

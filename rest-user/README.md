@@ -152,6 +152,41 @@ The MicroProfile OpenAPI has a set of annotations to customize each REST endpoin
 ## Swagger UI 
 When building APIs, developers want to test them quickly. Swagger UI is a great tool permitting to visualize and interact with APIs. The UI is automatically generated from your OpenAPI specification. The Quarkus smallrye-openapi extension comes with a swagger-ui extension embedding a properly configured Swagger UI page. By default, Swagger UI is accessible at /swagger-ui. So, once your application is started, you can go to http://localhost:8083/swagger-ui and play with API.
 
+## Observability
+### Health check
+Quarkus applications can utilize the MicroProfile Health specification through the SmallRye Health extension. The MicroProfile Health allows applications to provide information about their state to external viewers which is typically useful in cloud environments where automated processes must be able to determine whether the application should be discarded or restarted
+
+#### Running the Default Health Check
+
+Importing the `smallrye-health` extension directly exposes three REST endpoints:
+- [/health/live](http://localhost:8083/health/live) - The application is up and running.
+- [/health/ready](http://localhost:8083/health/ready) - The application is ready to serve requests.
+- [/health](http://localhost:8083/health) - Accumulating all health check procedures in the application.
+
+All of the health REST endpoints return a simple JSON object with two fields:
+- `status` — the overall result of all the health check procedures
+- `checks` — an array of individual checks
+
+The general status of the health check is computed as a logical AND of all the declared health check procedures. The checks array is empty by default but can be completed by custom health checks
+- Custom Ready HealthCheck : [DatabaseConnectionHealthCheck](./src/main/java/org/timeflies/users/health/DatabaseConnectionHealthCheck.java)
+- Custom Liveness Healthcheck : [PingUsersResourceHealthCheck](./src/main/java/org/timeflies/users/health/PingUsersResourceHealthCheck.java) 
+
+### Metrics
+MicroProfile Metrics allows applications to gather various metrics and statistics that provide insights into what is happening inside the application. The metrics can be read remotely using JSON format or the OpenMetrics format, so that they can be processed by additional tools such as Prometheus, and stored for analysis and visualisation
+Adding Metrics to UsersResource:
+We want now to measure all methods of all our REST resources. For that, we need a few annotations to make sure that our desired metrics are calculated over time and can be exported for manual analysis or processing by additional tooling. The metrics that we will gather are these:
+- countGetXXX: A counter which is increased by one each time the user gets the XXX method.
+- timeGetXXX: This is a timer, therefore a compound metric that benchmarks how much time the request take of the XXX method
+````java
+@Counted(name = "countGetRandomUser", description = "Counts how many times the getRandom method has been invoked")
+@Timed(name = "timeGetRandomUser", description = "Times how long it takes to invoke the getRandom method", unit = MetricUnits.MILLISECONDS)
+````
+
+To view the metrics, execute 
+````shell script
+$ curl -H "Accept: application/json" http://localhost:8083/metrics/application
+````
+
 ## Packaging and running the application
 
 The application can be packaged using `./mvnw package`.
