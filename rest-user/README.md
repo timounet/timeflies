@@ -4,13 +4,14 @@ This project uses Quarkus, the Supersonic Subatomic Java Framework.
 If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
 
 ## Quarkus Extensions
-- jdbc-postgresql
-- hibernate-orm-panache
-- hibernate-validator
-- resteasy-jsonb
-- openapi
-- health 
-- metrics
+- jdbc-postgresql : PostgreSQL database connector
+- hibernate-orm-panache : Define your persistent model in Hibernate ORM with Panache
+- hibernate-validator : Validate your persistent model
+- resteasy-jsonb : JSON-B serialization support for RESTEasy
+- openapi : Document your REST APIs with OpenAPI - comes with Swagger UI
+- health : Monitor service health
+- metrics : Extract metrics out of your services
+- container-image-jib : building  (and pushing) container images really fast and small (when it comes to pushing)
 
 (!) Kotlin extension is excluded for the moment because of issues with Panache extension [quarkus #8333](https://github.com/quarkusio/quarkus/pull/8333) & [quarkus #4394](https://github.com/quarkusio/quarkus/issues/4394) 
 
@@ -22,7 +23,7 @@ mvn io.quarkus:quarkus-maven-plugin:1.3.2.Final:create \
     -DprojectArtifactId=rest-user \
     -DclassName="org.timeflies.users.UserResource" \
     -Dpath="api/users" \
-    -Dextensions="jdbc-postgresql,hibernate-orm-panache,hibernate-validator,resteasy-jsonb,openapi,health,metrics"
+    -Dextensions="jdbc-postgresql,hibernate-orm-panache,hibernate-validator,resteasy-jsonb,openapi,health,metrics,container-image-jib"
 `````
 Or can be imported thanks to [code.quarkus.oi](https://code.quarkus.oi)
 ![Quarkus Project Generator](../doc/rest-user-quarkus-extension.png)
@@ -195,7 +196,20 @@ Be aware that it’s not an _über-jar_ as the dependencies are copied into the 
 
 The application is now runnable using `java -jar target/rest-user-1.0-SNAPSHOT-runner.jar`.
 
-## Creating a native executable
+### Build a container image and push to registry
+[Docker Hub timeflies Users API](https://hub.docker.com/repository/docker/tperdriau/timeflies-users-api)
+![users api](../doc/docker-hub.png)
+2 images should be available one JVM classic and a Native
+#### Running container in docker engine 
+Targeted container execution is kubernetes (not implemented yet)
+````shell script
+$ docker run --rm --name tfusers -p 8083:8083 tfusers tperdriau/timeflies-users-api:1.0-SNAPSHOT
+# In previous case the container would not reach the database
+$ docker run --rm --name tfusers --net="host" tperdriau/timeflies-users-api:1.0-SNAPSHOT
+# In this case, it should join the dev database but it s unesecured
+````
+(!) need to create a network with a view container will join postgresql database. 
+### Creating a native executable
 
 You can create a native executable using: `./mvnw package -Pnative`.
 
@@ -204,3 +218,31 @@ Or, if you don't have GraalVM installed, you can run the native executable build
 You can then execute your native executable with: `./target/rest-user-1.0-SNAPSHOT-runner`
 
 If you want to learn more about building native executables, please consult https://quarkus.io/guides/building-native-image.
+
+### Container Images
+The extension quarkus-container-image-jib is powered by Jib for performing container image builds. The major benefit of using Jib with Quarkus is that all the dependencies (everything found under target/lib) are cached in a different layer than the actual application making rebuilds really fast and small (when it comes to pushing). Another important benefit of using this extension is that it provides the ability to create a container image without having to have any dedicated client side tooling (like Docker) or running daemon processes (like the Docker daemon) when all that is needed is the ability to push to a container image registry.
+
+In situations where all that is needed to build a container image and no push to a registry is necessary (essentially by having set `quarkus.container-image.build=true` and left `quarkus.container-image.push` unset - it defaults to false), then this extension creates a container image and registers it with the Docker daemon. This means that although Docker isn’t used to build the image, it is nevertheless necessary. Also note that using this mode, the built container image will show up when executing docker images. 
+#### Building
+
+To build a container image for your project, `quarkus.container-image.build=true` needs to be set using any of the ways that Quarkus supports.
+````shell script
+mvnw clean package -Dquarkus.container-image.build=true
+````
+For native:
+````shell script
+mvnw clean package -Pnative -Dquarkus.native.container-build=true 
+````
+#### Pushing
+
+To push a container image for your project, `quarkus.container-image.push=true` needs to be set using any of the ways that Quarkus supports.
+````shell script
+mvnw clean package  -Dquarkus.container-build=true -Dquarkus.container-image.push=true
+````
+For native:
+````shell script
+mvnw clean package -Pnative -Dquarkus.native.container-build=true -Dquarkus.container-image.push=true -Dquarkus.container-image.tag=native-${quarkus.application.version:latest}
+````
+If no registry is set (using `quarkus.container-image.registry`) then [docker.io](https://hub.docker.com/) will be used as the default.
+
+ 
