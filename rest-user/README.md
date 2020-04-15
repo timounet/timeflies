@@ -208,6 +208,13 @@ $ docker run --rm --name tfusers -p 8083:8083 tfusers tperdriau/timeflies-users-
 $ docker run --rm --name tfusers --net="host" tperdriau/timeflies-users-api:1.0-SNAPSHOT
 # In this case, it should join the dev database but it s unesecured
 ````
+To remove container:
+````shell script
+$ docker run kill tfusers
+# Check containers
+$ docker ps
+$ docker stats
+````
 (!) need to create a network with a view container will join postgresql database. 
 ### Creating a native executable
 
