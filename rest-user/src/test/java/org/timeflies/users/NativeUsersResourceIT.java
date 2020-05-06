@@ -3,7 +3,7 @@ package org.timeflies.users;
 import io.quarkus.test.junit.NativeImageTest;
 
 @NativeImageTest
-public class NativeUsersResourceIT extends UsersResourceTest {
-
+public class NativeUsersResourceIT {
+// fixme
     // Execute the same tests but in native mode.
 }
