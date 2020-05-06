@@ -22,7 +22,6 @@ import javax.ws.rs.core.Application;
         },
         externalDocs = @ExternalDocumentation(url = "https://github.com/timounet/timeflies/blob/master/rest-user/README.md", description = "Rest user Readme"),
         tags = {
-                @Tag(name = "api", description = "Public that can be used by anybody"),
                 @Tag(name = "users", description = "Anybody interested in users")
         }
 )
