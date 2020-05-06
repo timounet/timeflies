@@ -27,9 +27,9 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
             ${{ runner.os }}-maven-
-      #- uses: DeLaGuardo/setup-graalvm@3
-      #  with:
-      #    graalvm-version: '20.0.0.java11'
+      - uses: DeLaGuardo/setup-graalvm@3
+        with:
+          graalvm-version: '20.0.0.java11'
       - name: env
         run: env
       - name: java -version
