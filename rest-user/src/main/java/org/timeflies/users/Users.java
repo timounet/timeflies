@@ -6,7 +6,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.util.Random;
+import java.security.SecureRandom;
 
 @Entity
 public class Users extends PanacheEntity {
@@ -25,7 +25,7 @@ public class Users extends PanacheEntity {
 
     public static Users findRandom() {
         long count = Users.count();
-        Random random = new Random();
+        SecureRandom random = new SecureRandom();
         int randomUser = random.nextInt((int) count);
         return Users.findAll().page(randomUser, 1).firstResult();
     }
