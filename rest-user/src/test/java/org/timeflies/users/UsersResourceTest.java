@@ -26,19 +26,19 @@ import static org.junit.jupiter.api.Assertions.*;
 @QuarkusTestResource(DatabaseResource.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class UsersResourceTest {
-    private static final String DEFAULT_USER_NAME = "spaceExplorer";
-    private static final String UPDATED_USER_NAME = "spaceExplorer (updated)";
-    private static final String DEFAULT_FIRST_NAME = "Roger";
-    private static final String UPDATED_FIRST_NAME = "Roger (updated)";
-    private static final String DEFAULT_LAST_NAME = "Cosmik";
-    private static final String UPDATED_LAST_NAME = "Comsik (updated)";
-    private static final String DEFAULT_PICTURE_URL = "galaxy_looser.png";
-    private static final String UPDATED_PICTURE_URL = "galaxy_looser.png (updated)";
-    private static final String DEFAULT_STATUS = "galaxy looser";
-    private static final String UPDATED_STATUS = "galaxy looser (updated)";
+    public static final String DEFAULT_USER_NAME = "spaceExplorer";
+    public static final String UPDATED_USER_NAME = "spaceExplorer (updated)";
+    public static final String DEFAULT_FIRST_NAME = "Roger";
+    public static final String UPDATED_FIRST_NAME = "Roger (updated)";
+    public static final String DEFAULT_LAST_NAME = "Cosmik";
+    public static final String UPDATED_LAST_NAME = "Comsik (updated)";
+    public static final String DEFAULT_PICTURE_URL = "galaxy_looser.png";
+    public static final String UPDATED_PICTURE_URL = "galaxy_looser.png (updated)";
+    public static final String DEFAULT_STATUS = "galaxy looser";
+    public static final String UPDATED_STATUS = "galaxy looser (updated)";
 
-    private static final int NB_USERS = 7;
-    private static String userId;
+    public static final int NB_USERS = 7;
+    public static String userId;
 
     @Test
     public void testHelloEndpoint() {

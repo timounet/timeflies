@@ -24,9 +24,9 @@ jobs:
       - uses: actions/cache@v1
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          key: ${{ runner.os }}-maven-tf-users-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            ${{ runner.os }}-maven-
+            ${{ runner.os }}-maven-tf-users-
       - uses: DeLaGuardo/setup-graalvm@3
         with:
           graalvm-version: '20.0.0.java11'
@@ -44,11 +44,9 @@ jobs:
       - name: ls
         run: ls
         working-directory: rest-user
-      #- name: Build with Jib and push
-      #  run: ./mvnw -B clean package  -Dquarkus.container-build=true -Dquarkus.container-image.push=true -Dquarkus.container-image.tag=${GITHUB_REF##*/}'-${quarkus.application.version:latest}' -Dquarkus.container-image.username=${{ secrets.DockerHubUsername }} -Dquarkus.container-image.password=${{ secrets.DockerHubPassword }}
-      #  working-directory: rest-user
       - name: Build native with Jib and push
         working-directory: rest-user
-        run: ./mvnw -B clean package -Pnative -Dquarkus.native.container-build=true -Dquarkus.container-image.push=true -Dquarkus.container-image.tag=native-${GITHUB_REF##*/}'-${quarkus.application.version:latest}' -Dquarkus.container-image.username=${{ secrets.DockerHubUsername }} -Dquarkus.container-image.password=${{ secrets.DockerHubPassword }}
-        # -Dsonar.host.url=https://host/sonar -Dsonar.login=${{ secrets.SonarToken }}
-        #run: ./mvnw -B clean package sonar:sonar -Pnative -Dquarkus.native.container-build=true -Dquarkus.container-image.push=true -Dquarkus.container-image.tag=native-${GITHUB_REF##*/}'-${quarkus.application.version:latest}' -Dquarkus.container-image.username=${{ secrets.DockerHubUsername }} -Dquarkus.container-image.password=${{ secrets.DockerHubPassword }} -Dsonar.host.url=https://app.elizay.com/sonar -Dsonar.login=${{ secrets.SonarToken }}
+        run: ./mvnw -B clean verify sonar:sonar -Pnative -Dquarkus.native.container-build=true -Dquarkus.container-image.push=true -Dquarkus.container-image.tag=native-${GITHUB_REF##*/}'-${quarkus.application.version:latest}' -Dquarkus.container-image.username=${{ secrets.DockerHubUsername }} -Dquarkus.container-image.password=${{ secrets.DockerHubPassword }} -Dsonar.login=${{ secrets.SonarToken }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GithubToken }}
+          SONAR_TOKEN: ${{ secrets.SonarToken }}

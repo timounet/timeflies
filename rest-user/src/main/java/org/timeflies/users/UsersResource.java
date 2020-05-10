@@ -27,6 +27,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 @Path("/api/users")
 @Produces(APPLICATION_JSON)
 public class UsersResource {
+
     private static final Logger log = Logger.getLogger(UsersResource.class);
 
     @ConfigProperty(name = "users.default.sort", defaultValue = "lastName,firstName,userName")
