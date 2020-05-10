@@ -1,13 +1,10 @@
-package org.timeflies.users;
+package org.timeflies.projects;
 
 import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.NativeImageTest;
 import io.restassured.common.mapper.TypeRef;
 import org.hamcrest.core.Is;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 
 import javax.ws.rs.core.HttpHeaders;
 import java.util.List;
@@ -21,25 +18,14 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.Status.*;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.timeflies.projects.UsersResourceTest.*;
 
-@QuarkusTest
+@NativeImageTest
+@Tag("integration")
 @QuarkusTestResource(DatabaseResource.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class UsersResourceTest {
-    public static final String DEFAULT_USER_NAME = "spaceExplorer";
-    public static final String UPDATED_USER_NAME = "spaceExplorer (updated)";
-    public static final String DEFAULT_FIRST_NAME = "Roger";
-    public static final String UPDATED_FIRST_NAME = "Roger (updated)";
-    public static final String DEFAULT_LAST_NAME = "Cosmik";
-    public static final String UPDATED_LAST_NAME = "Comsik (updated)";
-    public static final String DEFAULT_PICTURE_URL = "galaxy_looser.png";
-    public static final String UPDATED_PICTURE_URL = "galaxy_looser.png (updated)";
-    public static final String DEFAULT_STATUS = "galaxy looser";
-    public static final String UPDATED_STATUS = "galaxy looser (updated)";
-
-    public static final int NB_USERS = 7;
-    public static String userId;
-
+public class NativeUsersResourceIT {
+    // Native image is not able to load import.sql during test
     @Test
     public void testHelloEndpoint() {
         given()
@@ -57,15 +43,6 @@ public class UsersResourceTest {
                 .when().get("/api/users/{id}")
                 .then()
                 .statusCode(NO_CONTENT.getStatusCode());
-    }
-
-    @Test
-    void shouldGetRandomUser() {
-        given()
-                .when().get("/api/users/random")
-                .then()
-                .statusCode(OK.getStatusCode())
-                .header(CONTENT_TYPE, APPLICATION_JSON);
     }
 
     @Test
@@ -88,23 +65,13 @@ public class UsersResourceTest {
     }
 
     @Test
-    void shouldBeSorted() {
-        List<Users> users = get("/api/users/sort").then()
-                .statusCode(OK.getStatusCode())
-                .header(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON)
-                .extract().body().as(getUsersTypeRef());
-        assertEquals(NB_USERS, users.size());
-        assertEquals(5, users.get(0).id); // baboulinet is the 1st
-    }
-
-    @Test
     @Order(1)
     void shouldGetInitialItems() {
         List<Users> users = get("/api/users").then()
                 .statusCode(OK.getStatusCode())
                 .header(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON)
                 .extract().body().as(getUsersTypeRef());
-        assertEquals(NB_USERS, users.size());
+        assertEquals(0, users.size());
     }
 
     @Test
@@ -149,7 +116,7 @@ public class UsersResourceTest {
                 .statusCode(OK.getStatusCode())
                 .header(CONTENT_TYPE, APPLICATION_JSON)
                 .extract().body().as(getUsersTypeRef());
-        assertEquals(NB_USERS + 1, heroes.size());
+        assertEquals(1, heroes.size());
     }
 
     @Test
@@ -182,7 +149,7 @@ public class UsersResourceTest {
                 .statusCode(OK.getStatusCode())
                 .header(CONTENT_TYPE, APPLICATION_JSON)
                 .extract().body().as(getUsersTypeRef());
-        assertEquals(NB_USERS + 1, users.size());
+        assertEquals(1, users.size());
     }
 
     @Test
@@ -198,7 +165,7 @@ public class UsersResourceTest {
                 .statusCode(OK.getStatusCode())
                 .header(CONTENT_TYPE, APPLICATION_JSON)
                 .extract().body().as(getUsersTypeRef());
-        assertEquals(NB_USERS, users.size());
+        assertEquals(0, users.size());
     }
 
     @Test
@@ -248,5 +215,4 @@ public class UsersResourceTest {
             // Kept empty on purpose
         };
     }
-
 }

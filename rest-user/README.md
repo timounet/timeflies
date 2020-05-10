@@ -20,7 +20,7 @@ Created with maven archetype template:
 mvn io.quarkus:quarkus-maven-plugin:1.3.2.Final:create \
     -DprojectGroupId=org.timeflies \
     -DprojectArtifactId=rest-user \
-    -DclassName="org.timeflies.users.UserResource" \
+    -DclassName="org.timeflies.projects.UserResource" \
     -Dpath="api/users" \
     -Dextensions="jdbc-postgresql,hibernate-orm-panache,hibernate-validator,resteasy-jsonb,openapi,health,metrics,container-image-jib"
 `````
@@ -31,7 +31,7 @@ Or can be imported thanks to [code.quarkus.oi](https://code.quarkus.oi)
 
 The Maven archetype generates the following rest-user sub-directory:
 - the Maven structure with a pom.xml
-- an org.timeflies.users.UserResource resource exposed on /api/users
+- an org.timeflies.projects.UserResource resource exposed on /api/users
 - an associated unit test UserResourceTest
 - the landing page index.html that is accessible on http://localhost:8080 after starting the application
 - example Dockerfile files for both native and jvm modes in src/main/docker. Would be replaced by jib later
@@ -168,8 +168,8 @@ All of the health REST endpoints return a simple JSON object with two fields:
 - `checks` — an array of individual checks
 
 The general status of the health check is computed as a logical AND of all the declared health check procedures. The checks array is empty by default but can be completed by custom health checks
-- Custom Ready HealthCheck : [DatabaseConnectionHealthCheck](./src/main/java/org/timeflies/users/health/DatabaseConnectionHealthCheck.java)
-- Custom Liveness Healthcheck : [PingUsersResourceHealthCheck](./src/main/java/org/timeflies/users/health/PingUsersResourceHealthCheck.java) 
+- Custom Ready HealthCheck : [DatabaseConnectionHealthCheck](src/main/java/org/timeflies/projects/health/DatabaseConnectionHealthCheck.java)
+- Custom Liveness Healthcheck : [PingUsersResourceHealthCheck](src/main/java/org/timeflies/projects/health/PingUsersResourceHealthCheck.java) 
 
 ### Metrics
 MicroProfile Metrics allows applications to gather various metrics and statistics that provide insights into what is happening inside the application. The metrics can be read remotely using JSON format or the OpenMetrics format, so that they can be processed by additional tools such as Prometheus, and stored for analysis and visualisation

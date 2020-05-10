@@ -1,4 +1,4 @@
-package org.timeflies.users;
+package org.timeflies.projects;
 
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.eclipse.microprofile.metrics.MetricUnits;

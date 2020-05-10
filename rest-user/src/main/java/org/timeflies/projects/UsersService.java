@@ -1,4 +1,4 @@
-package org.timeflies.users;
+package org.timeflies.projects;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.transaction.Transactional;

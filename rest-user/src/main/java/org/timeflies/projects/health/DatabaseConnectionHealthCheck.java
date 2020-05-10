@@ -1,11 +1,11 @@
-package org.timeflies.users.health;
+package org.timeflies.projects.health;
 
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.HealthCheckResponseBuilder;
 import org.eclipse.microprofile.health.Readiness;
-import org.timeflies.users.Users;
-import org.timeflies.users.UsersService;
+import org.timeflies.projects.Users;
+import org.timeflies.projects.UsersService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;

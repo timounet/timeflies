@@ -4,7 +4,6 @@ App for sub contractors who works for several account at the same time and who w
 ## Global project overview
 Application that allows to track time to projects. It's about microservices communicating either synchronously via REST or asynchronously using Kafka:
 ![Image of micro services diagram](./doc/micro-services-diagram.png)
-- [User REST API](./rest-user/README.md): Allows CRUD operations on User which are stored in a Postgres database [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=timounet_timeflies_rest-users&metric=alert_status)](https://sonarcloud.io/dashboard?id=timounet_timeflies_rest-users) ![Rest User Profile CI](https://github.com/timounet/timeflies/workflows/Rest%20User%20Profile%20CI/badge.svg?branch=develop)
 - [User Profile REST API](./rest-user/README.md): Allows CRUD operations on User profile which are stored in a Postgres database  [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=timounet_timeflies_rest-users&metric=alert_status)](https://sonarcloud.io/dashboard?id=timounet_timeflies_rest-users) ![Rest User Profile CI](https://github.com/timounet/timeflies/workflows/Rest%20User%20Profile%20CI/badge.svg?branch=develop)
 - [Project REST API](./rest-project/README.md): Allows CRUD operations on Project which are stored in a Postgres database
 - [Timer REST API](./rest-timer/README.md): Allows CRUD operations on Project times (to start / stop a clock timer) which are stored in a Postgres database 
