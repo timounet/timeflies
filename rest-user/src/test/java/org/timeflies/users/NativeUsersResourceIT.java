@@ -4,10 +4,7 @@ import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.NativeImageTest;
 import io.restassured.common.mapper.TypeRef;
 import org.hamcrest.core.Is;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 
 import javax.ws.rs.core.HttpHeaders;
 import java.util.List;
@@ -24,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.timeflies.users.UsersResourceTest.*;
 
 @NativeImageTest
+@Tag("integration")
 @QuarkusTestResource(DatabaseResource.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class NativeUsersResourceIT {

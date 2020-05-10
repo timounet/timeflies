@@ -27,10 +27,14 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 public class UsersResource {
     private static final Logger log = Logger.getLogger(UsersResource.class);
 
+    private final UsersService service;
     @ConfigProperty(name = "users.default.sort", defaultValue = "lastName,firstName,userName")
     public String sort;
+
     @Inject
-    UsersService service;
+    public UsersResource(UsersService service) {
+        this.service = service;
+    }
 
     @Operation(summary = "Returns a random user")
     @APIResponse(responseCode = "200", content = @Content(mediaType = APPLICATION_JSON, schema = @Schema(implementation = Users.class, required = true)))
