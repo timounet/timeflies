@@ -1,7 +1,6 @@
-# rest-user project
+# rest-user : Micro service managing User Profile
 
-This project uses Quarkus, the Supersonic Subatomic Java Framework.
-If you want to learn more about Quarkus, please visit its website: https://quarkus.io/ .
+This project uses [Quarkus](https://quarkus.io/)
 
 ## Quarkus Extensions
 - jdbc-postgresql : PostgreSQL database connector
