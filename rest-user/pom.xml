@@ -8,6 +8,7 @@
     <version>1.0-SNAPSHOT</version>
     <properties>
         <compiler-plugin.version>3.8.1</compiler-plugin.version>
+        <jacoco.version>0.8.4</jacoco.version>
         <maven.compiler.parameters>true</maven.compiler.parameters>
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
@@ -17,11 +18,10 @@
         <quarkus.platform.artifact-id>quarkus-universe-bom</quarkus.platform.artifact-id>
         <quarkus.platform.group-id>io.quarkus</quarkus.platform.group-id>
         <quarkus.platform.version>1.4.2.Final</quarkus.platform.version>
-        <surefire-plugin.version>2.22.2</surefire-plugin.version>
-        <jacoco.version>0.8.4</jacoco.version>
-        <sonar.projectKey>timounet_timeflies_rest-users</sonar.projectKey>
-        <sonar.organization>timounet</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <sonar.organization>timounet</sonar.organization>
+        <sonar.projectKey>timounet_timeflies_rest-users</sonar.projectKey>
+        <surefire-plugin.version>2.22.2</surefire-plugin.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -95,13 +95,17 @@
         <dependency>
             <groupId>org.jacoco</groupId>
             <artifactId>org.jacoco.agent</artifactId>
+            <version>${jacoco.version}</version>
             <classifier>runtime</classifier>
             <scope>test</scope>
-            <version>${jacoco.version}</version>
         </dependency>
         <dependency>
             <groupId>io.quarkus</groupId>
             <artifactId>quarkus-container-image-jib</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-kubernetes</artifactId>
         </dependency>
     </dependencies>
     <build>
@@ -125,13 +129,6 @@
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire-plugin.version}</version>
-                <configuration>
-                    <excludedGroups>integration</excludedGroups>
-                    <systemProperties>
-                        <jacoco-agent.destfile>${project.build.directory}/jacoco-ut.exec</jacoco-agent.destfile>
-                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
-                    </systemProperties>
-                </configuration>
                 <executions>
                     <execution>
                         <id>integration-tests</id>
@@ -148,8 +145,14 @@
                         </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <excludedGroups>integration</excludedGroups>
+                    <systemProperties>
+                        <jacoco-agent.destfile>${project.build.directory}/jacoco-ut.exec</jacoco-agent.destfile>
+                        <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+                    </systemProperties>
+                </configuration>
             </plugin>
-
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
