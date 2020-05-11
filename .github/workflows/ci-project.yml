@@ -1,4 +1,4 @@
-name: Rest User Profile CI
+name: Rest Project CI
 
 on:
   push:
