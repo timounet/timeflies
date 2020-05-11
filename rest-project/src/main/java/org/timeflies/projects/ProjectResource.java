@@ -29,7 +29,7 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 public class ProjectResource {
     private static final Logger log = Logger.getLogger(ProjectResource.class);
 
-    @ConfigProperty(name = "projects.default.sort", defaultValue = "lastModified,name")
+    @ConfigProperty(name = "projects.default.sort", defaultValue = "lastModified desc,name")
     public String sort;
 
     @Inject

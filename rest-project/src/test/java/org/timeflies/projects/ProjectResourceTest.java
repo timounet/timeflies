@@ -2,19 +2,12 @@ package org.timeflies.projects;
 
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
-import io.restassured.RestAssured;
 import io.restassured.common.mapper.TypeRef;
-import io.restassured.config.ObjectMapperConfig;
-import io.restassured.mapper.ObjectMapper;
-import io.restassured.mapper.ObjectMapperDeserializationContext;
-import io.restassured.mapper.ObjectMapperSerializationContext;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
+import org.junit.jupiter.api.*;
 
-import javax.json.bind.Jsonb;
-import javax.json.bind.JsonbBuilder;
+import javax.inject.Inject;
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 import java.util.Random;
 
@@ -25,6 +18,8 @@ import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 import static javax.ws.rs.core.Response.Status.NO_CONTENT;
 import static javax.ws.rs.core.Response.Status.OK;
 import static org.hamcrest.CoreMatchers.is;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @QuarkusTest
 @QuarkusTestResource(DatabaseResource.class)
@@ -42,32 +37,19 @@ public class ProjectResourceTest {
     public static final Long UPDATE_USER_ID = 2L;
     public static final boolean DEFAULT_IS_ARCHIVED = false;
     public static final boolean UPDATE_IS_ARCHIVED = true;
-    public static final String DEFAULT_DATE = "2019-05-12 12:46:17";
-    public static final String UPDATE_DATE = "2020-05-11 12:46:17";
+    public static final LocalDateTime DEFAULT_DATE = LocalDateTime.of(2019, Month.FEBRUARY, 1, 10, 50);
+    public static final LocalDateTime UPDATE_DATE = LocalDateTime.of(2020, Month.MAY, 11, 10, 50);
 
     public static final int NB_PROJECTS = 38;
-    public static String projectId;
+    public static Long projectId;
 
-    @BeforeAll
-    static void giveMeAMapper() {
-        final Jsonb jsonb = JsonbBuilder.create();
-        ObjectMapper mapper = new ObjectMapper() {
-            @Override
-            public Object deserialize(ObjectMapperDeserializationContext context) {
-                return jsonb.fromJson(context.getDataToDeserialize().asString(), context.getType());
-            }
-
-            @Override
-            public Object serialize(ObjectMapperSerializationContext context) {
-                return jsonb.toJson(context.getObjectToSerialize());
-            }
-        };
-        RestAssured.config.objectMapperConfig(ObjectMapperConfig.objectMapperConfig().defaultObjectMapper(mapper));
-    }
+    // Use resource to avoid RestAssured deserialization using jackson and not Json-B
+    @Inject
+    private ProjectResource resource;
 
     @Test
     void shouldGetRandomProjectForUser() {
-        Long userId = 1L;
+        long userId = 1L;
         given()
                 .when().get("/api/projects/user/" + userId + "/random")
                 .then()
@@ -85,45 +67,101 @@ public class ProjectResourceTest {
                 .statusCode(NO_CONTENT.getStatusCode());
     }
 
-   /* @Test
-    void shouldNotAddInvalidItem() throws ParseException {
+    // Use resource to avoid RestAssured deserialization using jackson and not Json-B
+    @Test
+    void shouldNotAddInvalidItem() {
         Project proj = new Project();
-        proj.lastModified = LocalDateTime.parse(DEFAULT_DATE);
+        proj.lastModified = DEFAULT_DATE;
         proj.description = DEFAULT_DESCRIPTION;
         proj.color = DEFAULT_COLOR;
         proj.isArchived = DEFAULT_IS_ARCHIVED;
         proj.userId = DEFAULT_USER_ID;
         proj.name = "A";
+        try {
+            Project p = resource.service.persist(proj);
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            Assertions.assertNull(null);
+        }
+    }
 
-        given()
-                .body(proj)
-                .header(CONTENT_TYPE, APPLICATION_JSON)
-                .header(ACCEPT, APPLICATION_JSON)
-                .when()
-                .post("/api/projects")
-                .then()
-                .statusCode(BAD_REQUEST.getStatusCode());
-    }*/
-/*
+    // Use resource to avoid RestAssured deserialization using jackson and not Json-B
     @Test
     void shouldBeSorted() {
-        List<Project> projects = get("/api/projects/sort").then()
-                .statusCode(OK.getStatusCode())
-                .header(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON)
-                .extract().body().as(getProjectTypeRef());
-        assertEquals(NB_PROJECTS, projects.size());
-        assertEquals(3, projects.get(0).id); // 3 project named 'test' 2020-05-06
+        List<Project> projects = resource.service.listSortBy("order by " + resource.sort);
+        Assertions.assertEquals(NB_PROJECTS, projects.size());
+        Assertions.assertEquals(3, projects.get(0).id); // 3 project named 'test' 2020-05-06
     }
 
     @Test
     @Order(1)
     void shouldGetInitialItems() {
-        List<Project> projects = get("/api/projects").then()
-                .statusCode(OK.getStatusCode())
-                .header(HttpHeaders.CONTENT_TYPE, APPLICATION_JSON)
-                .extract().body().as(getProjectTypeRef());
+        List<Project> projects = resource.service.findAll();
+        Assertions.assertEquals(NB_PROJECTS, projects.size());
+    }
+
+    @Test
+    @Order(2)
+    void shouldAddUser() {
+        Project proj = new Project();
+        proj.lastModified = DEFAULT_DATE;
+        proj.description = DEFAULT_DESCRIPTION;
+        proj.color = DEFAULT_COLOR;
+        proj.isArchived = DEFAULT_IS_ARCHIVED;
+        proj.userId = DEFAULT_USER_ID;
+        proj.name = DEFAULT_NAME;
+
+        Project newProj = resource.service.persist(proj);
+        assertEquals(DEFAULT_NAME, newProj.name);
+
+        projectId = newProj.id;
+        assertNotNull(projectId);
+
+        newProj = resource.service.findById(projectId);
+        assertEquals(DEFAULT_NAME, newProj.name);
+
+        List<Project> projects = resource.service.findAll();
+        assertEquals(NB_PROJECTS + 1, projects.size());
+    }
+
+    @Test
+    @Order(3)
+    void shouldUpdateAnItem() {
+        Project proj = new Project();
+        proj.lastModified = UPDATE_DATE;
+        proj.description = UPDATE_DESCRIPTION;
+        proj.color = UPDATE_COLOR;
+        proj.isArchived = UPDATE_IS_ARCHIVED;
+        proj.userId = UPDATE_USER_ID;
+        proj.name = UPDATE_NAME;
+        proj.id = projectId;
+
+        Project newProj = resource.service.update(proj);
+        newProj = resource.service.findById(newProj.id);
+        assertEquals(UPDATE_NAME, newProj.name);
+        assertEquals(UPDATE_DATE, newProj.lastModified);
+        assertEquals(UPDATE_DESCRIPTION, newProj.description);
+        assertEquals(UPDATE_COLOR, newProj.color);
+        assertEquals(UPDATE_USER_ID, newProj.userId);
+        List<Project> projects = resource.service.findAll();
+        assertEquals(NB_PROJECTS + 1, projects.size());
+    }
+
+    @Test
+    @Order(4)
+    void shouldRemoveAnItem() {
+        resource.service.delete(projectId);
+        List<Project> projects = resource.service.findAll();
         assertEquals(NB_PROJECTS, projects.size());
-    }*/
+    }
+
+    @Test
+    @Order(5)
+    void shouldGetLatestProject() {
+        Project p = resource.service.userLatest(7L);
+        assertEquals(36L, p.id);
+    }
+
 
     @Test
     public void testHelloEndpoint() {

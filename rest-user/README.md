@@ -18,7 +18,7 @@ This project uses [Quarkus](https://quarkus.io/)
 ## Bootstrapping the User REST Endpoint
 Created with maven archetype template:
 `````shell script
-mvn io.quarkus:quarkus-maven-plugin:1.3.2.Final:create \
+mvn io.quarkus:quarkus-maven-plugin:1.4.2.Final:create \
     -DprojectGroupId=org.timeflies \
     -DprojectArtifactId=rest-user \
     -DclassName="org.timeflies.projects.UserResource" \
@@ -34,7 +34,7 @@ The Maven archetype generates the following rest-user sub-directory:
 - the Maven structure with a pom.xml
 - an org.timeflies.projects.UserResource resource exposed on /api/users
 - an associated unit test UserResourceTest
-- the landing page index.html that is accessible on http://localhost:8080 after starting the application
+- the landing page index.html that is accessible on http://localhost:8083 after starting the application
 - example Dockerfile files for both native and jvm modes in src/main/docker. Would be replaced by jib later
 - the application.properties configuration file
 
