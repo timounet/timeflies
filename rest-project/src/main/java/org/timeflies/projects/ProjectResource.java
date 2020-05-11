@@ -43,7 +43,7 @@ public class ProjectResource {
     @Path("/user/{userId}/random/")
     public Response getRandom(
             @Parameter(description = "user Id")
-            @QueryParam("userId") Long userId) {
+            @PathParam("userId") Long userId) {
         Project proj = service.userRandom(userId);
         log.debug("Found random proj " + proj);
         return Response.ok(proj).build();
@@ -58,7 +58,7 @@ public class ProjectResource {
     @Path("/user/{userId}")
     public Response getAllUserProjects(
             @Parameter(description = "user Id")
-            @QueryParam("userId") Long userId) {
+            @PathParam("userId") Long userId) {
         List<Project> Project = service.userList(userId);
         log.debug("Total number of Project " + Project.size() + " for user " + userId);
         return Response.ok(Project).build();
@@ -73,7 +73,7 @@ public class ProjectResource {
     @Path("/user/{userId}/latest")
     public Response getUserLatest(
             @Parameter(description = "user Id")
-            @QueryParam("userId") Long userId) {
+            @PathParam("userId") Long userId) {
         Project proj = service.userLatest(userId);
         if (proj != null) {
             log.debug("Found project " + proj);

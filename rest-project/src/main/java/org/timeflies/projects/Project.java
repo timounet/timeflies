@@ -1,14 +1,16 @@
 package org.timeflies.projects;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import io.quarkus.runtime.annotations.RegisterForReflection;
 
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDateTime;
+
 
 @Entity
+@RegisterForReflection
 public class Project extends PanacheEntity {
 
     @NotNull
@@ -19,10 +21,10 @@ public class Project extends PanacheEntity {
     @Size(max = 250)
     public String description;
     @Size(min = 2, max = 20)
-    public String colour = "#808080";
-    public boolean isArchived = false;
+    public String color = "#808080";
+    public boolean isArchived;
     @NotNull
-    public Date lastModified = new Date();
+    public LocalDateTime lastModified;
 
     @Override
     public String toString() {
@@ -30,7 +32,7 @@ public class Project extends PanacheEntity {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", isArchived='" + isArchived + '\'' +
-                ", lastModified=" + new SimpleDateFormat("dd-MM-yyyy HH-mm-ss").format(lastModified) +
+                ", lastModified=" + lastModified.toString() +
                 '}';
     }
 

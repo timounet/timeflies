@@ -57,7 +57,7 @@ public class ProjectService {
         entity.name = proj.name;
         entity.userId = proj.userId;
         entity.description = proj.description;
-        entity.colour = proj.colour;
+        entity.color = proj.color;
         entity.lastModified = proj.lastModified;
         entity.isArchived = proj.isArchived;
         return entity;
