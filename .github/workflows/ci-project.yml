@@ -43,7 +43,7 @@ jobs:
         working-directory: rest-project
       - name: Build native with Jib and push
         working-directory: rest-project
-        run: ./mvnw -B clean verify sonar:sonar -Pnative -Dquarkus.native.container-build=true -Dquarkus.container-image.push=falsepo -Dquarkus.container-image.tag=native-${GITHUB_REF##*/}'-${quarkus.application.version:latest}' -Dquarkus.container-image.username=${{ secrets.DockerHubUsername }} -Dquarkus.container-image.password=${{ secrets.DockerHubPassword }} -Dsonar.login=${{ secrets.SonarToken }} -Dsonar.branch.name=${GITHUB_REF##*/}
+        run: ./mvnw -B clean verify sonar:sonar -Pnative -Dquarkus.native.container-build=true -Dquarkus.container-image.push=true -Dquarkus.container-image.tag=native-${GITHUB_REF##*/}'-${quarkus.application.version:latest}' -Dquarkus.container-image.username=${{ secrets.DockerHubUsername }} -Dquarkus.container-image.password=${{ secrets.DockerHubPassword }} -Dsonar.login=${{ secrets.SonarToken }}
         env:
           GITHUB_TOKEN: ${{ secrets.GithubToken }}
           SONAR_TOKEN: ${{ secrets.SonarToken }}

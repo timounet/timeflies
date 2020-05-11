@@ -1,3 +1,4 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=timounet_timeflies_rest-users&metric=alert_status)](https://sonarcloud.io/dashboard?id=timounet_timeflies_rest-users) ![Rest User Profile CI](https://github.com/timounet/timeflies/workflows/Rest%20User%20Profile%20CI/badge.svg?branch=develop)
 # rest-user : Micro service managing User Profile
 
 This project uses [Quarkus](https://quarkus.io/)
@@ -196,15 +197,15 @@ Be aware that it’s not an _über-jar_ as the dependencies are copied into the 
 The application is now runnable using `java -jar target/rest-user-1.0-SNAPSHOT-runner.jar`.
 
 ### Build a container image and push to registry
-[Docker Hub timeflies Users API](https://hub.docker.com/repository/docker/tperdriau/timeflies-users-api)
+[Docker Hub timeflies Users API](https://hub.docker.com/repository/docker/timefliesapp/users-api)
 ![users api](../doc/docker-hub.png)
 2 images should be available one JVM classic and a Native
 #### Running container in docker engine 
 Targeted container execution is kubernetes (not implemented yet)
 ````shell script
-$ docker run --rm --name tfusers -p 8083:8083 tfusers tperdriau/timeflies-users-api:1.0-SNAPSHOT
+$ docker run --rm --name tfusers -p 8083:8083 tfusers timefliesapp/users-api:1.0-SNAPSHOT
 # In previous case the container would not reach the database
-$ docker run --rm --name tfusers --net="host" tperdriau/timeflies-users-api:1.0-SNAPSHOT
+$ docker run --rm --name tfusers --net="host" timefliesapp/users-api:1.0-SNAPSHOT
 # In this case, it should join the dev database but it s unesecured
 ````
 To remove container:

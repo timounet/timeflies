@@ -1,3 +1,4 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=timounet_timeflies_rest-project&metric=alert_status)](https://sonarcloud.io/dashboard?id=timounet_timeflies_rest-project) ![Rest Project CI](https://github.com/timounet/timeflies/workflows/Rest%20Project%20CI/badge.svg?branch=develop)
 # rest-project project
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
