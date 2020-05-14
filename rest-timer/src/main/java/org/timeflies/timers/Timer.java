@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @RegisterForReflection
 public class Timer extends PanacheEntity {
     public LocalDateTime start = LocalDateTime.now();
-    public LocalDateTime end;
+    public LocalDateTime finish;
     @NotNull
     public Long userId;
     @NotNull
@@ -24,7 +24,7 @@ public class Timer extends PanacheEntity {
                 ", projectId='" + projectId + '\'' +
                 ", userId='" + userId + '\'' +
                 ", start=" + start.toString() +
-                ", end=" + end.toString() +
+                ", end=" + finish.toString() +
                 '}';
     }
 }

@@ -58,7 +58,7 @@ public class TimerService {
         entity.projectId = timer.projectId;
         entity.userId = timer.userId;
         entity.start = timer.start;
-        entity.end = timer.end;
+        entity.finish = timer.finish;
         return entity;
     }
 

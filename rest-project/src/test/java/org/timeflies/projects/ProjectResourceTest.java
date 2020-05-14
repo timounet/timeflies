@@ -3,9 +3,11 @@ package org.timeflies.projects;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.common.mapper.TypeRef;
+import org.junit.Ignore;
 import org.junit.jupiter.api.*;
 
 import javax.inject.Inject;
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.util.List;
@@ -212,6 +214,31 @@ public class ProjectResourceTest {
                 .when().get("/metrics/application")
                 .then()
                 .statusCode(OK.getStatusCode());
+    }
+
+    private int random(int i) {
+        SecureRandom random = new SecureRandom();
+        return random.nextInt(i - 1) + 1;
+    }
+
+    @Ignore
+    void setNbProjectsTimersForImportSql() {
+        System.out.println("'projectId', 'userId', 'start', 'end'");
+        Long id = 0l;
+
+        for (Project p : resource.service.findAll()) {
+            int randomTimers = random(10);
+
+            int i = 0;
+            while (i < randomTimers) {
+                LocalDateTime start = LocalDateTime.of(2017 + random(3), random(5), random(28)
+                        , random(23), random(59), random(59), random(59));
+                LocalDateTime finish = start.plusHours(random(8)).plusMinutes(random(59)).plusSeconds(random(59));
+                System.out.println("INSERT INTO Timer(id, projectId,userId,start,finish) VALUES (nextval('hibernate_sequence'),'"
+                        + p.id + "' ,'" + p.userId + "' ,TIMESTAMP '" + start + "' ,TIMESTAMP '" + finish + "');");
+                i++;
+            }
+        }
     }
 
     private TypeRef<List<Project>> getProjectTypeRef() {
