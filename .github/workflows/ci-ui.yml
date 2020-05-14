@@ -7,8 +7,8 @@ on:
   push:
     # Sequence of patterns matched against refs/heads
     branches:
-      - master
-      - develop
+      # - master
+      # - develop
       - 'releases/**'
       - 'feature/ci*'
       - 'feature/ui*'

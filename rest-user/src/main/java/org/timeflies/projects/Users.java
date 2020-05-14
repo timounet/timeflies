@@ -1,4 +1,4 @@
-package org.timeflies.users;
+package org.timeflies.projects;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntity;
 

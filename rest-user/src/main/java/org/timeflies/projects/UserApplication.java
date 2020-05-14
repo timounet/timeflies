@@ -1,4 +1,4 @@
-package org.timeflies.users;
+package org.timeflies.projects;
 
 
 import org.eclipse.microprofile.openapi.annotations.ExternalDocumentation;

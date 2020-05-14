@@ -4,9 +4,8 @@ App for sub contractors who works for several account at the same time and who w
 ## Global project overview
 Application that allows to track time to projects. It's about microservices communicating either synchronously via REST or asynchronously using Kafka:
 ![Image of micro services diagram](./doc/micro-services-diagram.png)
-- [User REST API](./rest-user/README.md): Allows CRUD operations on User which are stored in a Postgres database [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=timounet_timeflies_rest-users&metric=alert_status)](https://sonarcloud.io/dashboard?id=timounet_timeflies_rest-users) ![Rest User Profile CI](https://github.com/timounet/timeflies/workflows/Rest%20User%20Profile%20CI/badge.svg?branch=develop)
 - [User Profile REST API](./rest-user/README.md): Allows CRUD operations on User profile which are stored in a Postgres database  [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=timounet_timeflies_rest-users&metric=alert_status)](https://sonarcloud.io/dashboard?id=timounet_timeflies_rest-users) ![Rest User Profile CI](https://github.com/timounet/timeflies/workflows/Rest%20User%20Profile%20CI/badge.svg?branch=develop)
-- [Project REST API](./rest-project/README.md): Allows CRUD operations on Project which are stored in a Postgres database
+- [Project REST API](./rest-project/README.md): Allows CRUD operations on Project which are stored in a Postgres database [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=timounet_timeflies_rest-project&metric=alert_status)](https://sonarcloud.io/dashboard?id=timounet_timeflies_rest-project) ![Rest Project CI](https://github.com/timounet/timeflies/workflows/Rest%20Project%20CI/badge.svg?branch=develop)
 - [Timer REST API](./rest-timer/README.md): Allows CRUD operations on Project times (to start / stop a clock timer) which are stored in a Postgres database 
 - [API Gateway ](./rest-gw/README.md) This REST API invokes every micro service APIs. It implements security with keycloak 
 - [Time flies UI](./ui/README.md): a reactJs application allowing you to pick up a project and play timers. The TimeFlies UI is exposed via nginx? and invokes the Gateway REST API. It will be keycloak UI either, for login, registration, forgot password ans logout
@@ -15,6 +14,10 @@ Application that allows to track time to projects. It's about microservices comm
 - [Web router](./router/README.md): Nginx web router / reverse proxy / load balancer / application entry point. Will host https
 - [Statistics](./event-statistics/README.md): Each timer is asynchronously sent (via Kafka) to the Statistics microservice. It has a HTML + JQuery UI displaying all the statistics.
 
+## Artifacts
+### DockerHub timefliesapp organization
+[timefliesapp dockerhub organization](https://hub.docker.com/orgs/timefliesapp/repositories)
+![Docker hub org](./doc/docker-hub-org.png)
 ## Development requirements
 ### Git
 - Branch names convention : [GitFlow names](https://nvie.com/posts/a-successful-git-branching-model/)

@@ -1,3 +1,4 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=timounet_timeflies_rest-users&metric=alert_status)](https://sonarcloud.io/dashboard?id=timounet_timeflies_rest-users) ![Rest User Profile CI](https://github.com/timounet/timeflies/workflows/Rest%20User%20Profile%20CI/badge.svg?branch=develop)
 # rest-user : Micro service managing User Profile
 
 This project uses [Quarkus](https://quarkus.io/)
@@ -17,10 +18,10 @@ This project uses [Quarkus](https://quarkus.io/)
 ## Bootstrapping the User REST Endpoint
 Created with maven archetype template:
 `````shell script
-mvn io.quarkus:quarkus-maven-plugin:1.3.2.Final:create \
+mvn io.quarkus:quarkus-maven-plugin:1.4.2.Final:create \
     -DprojectGroupId=org.timeflies \
     -DprojectArtifactId=rest-user \
-    -DclassName="org.timeflies.users.UserResource" \
+    -DclassName="org.timeflies.projects.UserResource" \
     -Dpath="api/users" \
     -Dextensions="jdbc-postgresql,hibernate-orm-panache,hibernate-validator,resteasy-jsonb,openapi,health,metrics,container-image-jib"
 `````
@@ -31,9 +32,9 @@ Or can be imported thanks to [code.quarkus.oi](https://code.quarkus.oi)
 
 The Maven archetype generates the following rest-user sub-directory:
 - the Maven structure with a pom.xml
-- an org.timeflies.users.UserResource resource exposed on /api/users
+- an org.timeflies.projects.UserResource resource exposed on /api/users
 - an associated unit test UserResourceTest
-- the landing page index.html that is accessible on http://localhost:8080 after starting the application
+- the landing page index.html that is accessible on http://localhost:8083 after starting the application
 - example Dockerfile files for both native and jvm modes in src/main/docker. Would be replaced by jib later
 - the application.properties configuration file
 
@@ -168,8 +169,8 @@ All of the health REST endpoints return a simple JSON object with two fields:
 - `checks` — an array of individual checks
 
 The general status of the health check is computed as a logical AND of all the declared health check procedures. The checks array is empty by default but can be completed by custom health checks
-- Custom Ready HealthCheck : [DatabaseConnectionHealthCheck](./src/main/java/org/timeflies/users/health/DatabaseConnectionHealthCheck.java)
-- Custom Liveness Healthcheck : [PingUsersResourceHealthCheck](./src/main/java/org/timeflies/users/health/PingUsersResourceHealthCheck.java) 
+- Custom Ready HealthCheck : [DatabaseConnectionHealthCheck](src/main/java/org/timeflies/projects/health/DatabaseConnectionHealthCheck.java)
+- Custom Liveness Healthcheck : [PingUsersResourceHealthCheck](src/main/java/org/timeflies/projects/health/PingUsersResourceHealthCheck.java) 
 
 ### Metrics
 MicroProfile Metrics allows applications to gather various metrics and statistics that provide insights into what is happening inside the application. The metrics can be read remotely using JSON format or the OpenMetrics format, so that they can be processed by additional tools such as Prometheus, and stored for analysis and visualisation
@@ -196,15 +197,15 @@ Be aware that it’s not an _über-jar_ as the dependencies are copied into the 
 The application is now runnable using `java -jar target/rest-user-1.0-SNAPSHOT-runner.jar`.
 
 ### Build a container image and push to registry
-[Docker Hub timeflies Users API](https://hub.docker.com/repository/docker/tperdriau/timeflies-users-api)
+[Docker Hub timeflies Users API](https://hub.docker.com/repository/docker/timefliesapp/users-api)
 ![users api](../doc/docker-hub.png)
 2 images should be available one JVM classic and a Native
 #### Running container in docker engine 
 Targeted container execution is kubernetes (not implemented yet)
 ````shell script
-$ docker run --rm --name tfusers -p 8083:8083 tfusers tperdriau/timeflies-users-api:1.0-SNAPSHOT
+$ docker run --rm --name tfusers -p 8083:8083 tfusers timefliesapp/users-api:1.0-SNAPSHOT
 # In previous case the container would not reach the database
-$ docker run --rm --name tfusers --net="host" tperdriau/timeflies-users-api:1.0-SNAPSHOT
+$ docker run --rm --name tfusers --net="host" timefliesapp/users-api:1.0-SNAPSHOT
 # In this case, it should join the dev database but it s unesecured
 ````
 To remove container:

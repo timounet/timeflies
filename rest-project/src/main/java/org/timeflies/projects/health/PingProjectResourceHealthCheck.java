@@ -1,18 +1,18 @@
-package org.timeflies.users.health;
+package org.timeflies.projects.health;
 
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.Liveness;
-import org.timeflies.users.UsersResource;
+import org.timeflies.projects.ProjectResource;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 @Liveness
 @ApplicationScoped
-public class PingUsersResourceHealthCheck implements HealthCheck {
+public class PingProjectResourceHealthCheck implements HealthCheck {
     @Inject
-    UsersResource resource;
+    ProjectResource resource;
 
     @Override
     public HealthCheckResponse call() {

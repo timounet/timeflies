@@ -1,0 +1,49 @@
+name: Rest Project CI
+
+on:
+  push:
+    # Sequence of patterns matched against refs/heads
+    branches:
+      - master
+      - develop
+      - 'releases/**'
+      - 'feature/ci*'
+      - 'feature/rest-project*'
+      - 'feature/proj*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    # runs-on: self-hosted #It's linux now on WSL
+    steps:
+      - name: code checkout
+        uses: actions/checkout@v1
+      - uses: actions/cache@v1
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-tf-users-${{ hashFiles('**/pom.xml') }}
+          restore-keys: |
+            ${{ runner.os }}-maven-tf-users-
+      - uses: DeLaGuardo/setup-graalvm@3
+        with:
+          graalvm-version: '20.0.0.java11'
+      - name: env
+        run: env
+      - name: java -version
+        run: java -version
+      - name: javac -version
+        run: javac -version
+      - name: mvn -version
+        run: mvn -version
+      - name: chmod
+        run: chmod 755 ./mvnw
+        working-directory: rest-project
+      - name: ls
+        run: ls
+        working-directory: rest-project
+      - name: Build native with Jib and push
+        working-directory: rest-project
+        run: ./mvnw -B clean verify sonar:sonar -Pnative -Dquarkus.native.container-build=true -Dquarkus.container-image.push=true -Dquarkus.container-image.tag=native-${GITHUB_REF##*/}'-${quarkus.application.version:latest}' -Dquarkus.container-image.username=${{ secrets.DockerHubUsername }} -Dquarkus.container-image.password=${{ secrets.DockerHubPassword }} -Dsonar.login=${{ secrets.SonarToken }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GithubToken }}
+          SONAR_TOKEN: ${{ secrets.SonarToken }}
