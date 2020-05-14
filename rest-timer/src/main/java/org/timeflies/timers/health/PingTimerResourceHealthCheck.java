@@ -1,22 +1,22 @@
-package org.timeflies.projects.health;
+package org.timeflies.timers.health;
 
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.Liveness;
-import org.timeflies.projects.ProjectResource;
+import org.timeflies.timers.TimerResource;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
 
 @Liveness
 @ApplicationScoped
-public class PingProjectResourceHealthCheck implements HealthCheck {
+public class PingTimerResourceHealthCheck implements HealthCheck {
     @Inject
-    ProjectResource resource;
+    TimerResource resource;
 
     @Override
     public HealthCheckResponse call() {
         resource.hello();
-        return HealthCheckResponse.named("Ping Projects REST Endpoint").up().build();
+        return HealthCheckResponse.named("Ping Timers REST Endpoint").up().build();
     }
 }
