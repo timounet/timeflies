@@ -1,47 +1,73 @@
 version: "3"
 services:
-    database:
-        image: "postgres:12.2"
-        container_name: "tf-database"
-        ports:
-            - "5432:5432"
-        volumes:
-            - ./db-init/initialize-databases.sql:/docker-entrypoint-initdb.d/init.sql
-        environment:
-            - "POSTGRES_USER=super"
-            - "POSTGRES_PASSWORD=super"
+  database:
+    image: "postgres:12.2"
+    container_name: "tf-database"
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./db-init/initialize-databases.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - "POSTGRES_USER=super"
+      - "POSTGRES_PASSWORD=super"
+  keycloak:
+    image: quay.io/keycloak/keycloak:10.0.1
+    restart: on-failure
+    container_name: "tf-auth-keycloak"
+    environment:
+      DB_VENDOR: POSTGRES
+      DB_ADDR: database
+      DB_DATABASE: keycloak_database
+      DB_USER: keycloak
+      DB_SCHEMA: public
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: plop
+      DB_PASSWORD: keycloak
+    volumes:
+      - ./keycloak/realm.export.json:/opt/jboss/keycloak/import-realm.json
+      # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
+      #JDBC_PARAMS: "ssl=true"
+    #           env_file:
+    #               - /home/debian/.secret/auth/kc.env
+    #            volumes:
+    #                - "/home/debian/cert/app.elizay.com/keycloak/:/etc/x509/https"
+    ports:
+      - 8443:8443
+    depends_on:
+      - database
 
-    monitoring:
-        image: "prom/prometheus"
-        container_name: "tf-supervisor"
-        ports:
-          - 9090:9090
-        volumes:
-          - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+  monitoring:
+    image: "prom/prometheus"
+    container_name: "tf-supervisor"
+    ports:
+      - 9090:9090
+    volumes:
+      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
 
-    zookeeper:
-        image: strimzi/kafka:0.17.0-rc4-kafka-2.4.0
-        command: [
-            "sh", "-c",
-            "bin/zookeeper-server-start.sh config/zookeeper.properties"
-        ]
-        ports:
-            - "2181:2181"
-        environment:
-            LOG_DIR: /tmp/logs
+#  zookeeper:
+#    image: strimzi/kafka:0.17.0-rc4-kafka-2.4.0
+#    command: [
+#      "sh", "-c",
+#      "bin/zookeeper-server-start.sh config/zookeeper.properties"
+#    ]
+#    ports:
+#      - "2181:2181"
+#    environment:
+#      LOG_DIR: /tmp/logs
 
-    kafka:
-        image: strimzi/kafka:0.17.0-rc4-kafka-2.4.0
-        command: [
-            "sh", "-c",
-            "bin/kafka-server-start.sh config/server.properties --override listeners=$${KAFKA_LISTENERS} --override advertised.listeners=$${KAFKA_ADVERTISED_LISTENERS} --override zookeeper.connect=$${KAFKA_ZOOKEEPER_CONNECT}"
-        ]
-        depends_on:
-            - zookeeper
-        ports:
-            - "9092:9092"
-        environment:
-            LOG_DIR: "/tmp/logs"
-            KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
-            KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
-            KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+#  kafka:
+#    image: strimzi/kafka:0.17.0-rc4-kafka-2.4.0
+#    command: [
+#      "sh", "-c",
+#      "bin/kafka-server-start.sh config/server.properties --override listeners=$${KAFKA_LISTENERS} --override advertised.listeners=$${KAFKA_ADVERTISED_LISTENERS} --override zookeeper.connect=$${KAFKA_ZOOKEEPER_CONNECT}"
+#    ]
+#    depends_on:
+#      - zookeeper
+#    ports:
+#      - "9092:9092"
+#    environment:
+#      LOG_DIR: "/tmp/logs"
+#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+#      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092
+#      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+
