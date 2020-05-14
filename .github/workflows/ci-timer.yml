@@ -21,9 +21,9 @@ jobs:
       - uses: actions/cache@v1
         with:
           path: ~/.m2/repository
-          key: ${{ runner.os }}-maven-tf-users-${{ hashFiles('**/pom.xml') }}
+          key: ${{ runner.os }}-maven-tf-timers-${{ hashFiles('**/pom.xml') }}
           restore-keys: |
-            ${{ runner.os }}-maven-tf-users-
+            ${{ runner.os }}-maven-tf-timers-
       - uses: DeLaGuardo/setup-graalvm@3
         with:
           graalvm-version: '20.0.0.java11'

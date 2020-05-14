@@ -1,11 +1,11 @@
-package org.timeflies.projects.health;
+package org.timeflies.timers.health;
 
 import org.eclipse.microprofile.health.HealthCheck;
 import org.eclipse.microprofile.health.HealthCheckResponse;
 import org.eclipse.microprofile.health.HealthCheckResponseBuilder;
 import org.eclipse.microprofile.health.Readiness;
-import org.timeflies.projects.Project;
-import org.timeflies.projects.ProjectService;
+import org.timeflies.timers.Timer;
+import org.timeflies.timers.TimerService;
 
 import javax.enterprise.context.ApplicationScoped;
 import javax.inject.Inject;
@@ -15,14 +15,14 @@ import java.util.List;
 @ApplicationScoped
 public class DatabaseConnectionHealthCheck implements HealthCheck {
     @Inject
-    ProjectService service;
+    TimerService service;
 
     @Override
     public HealthCheckResponse call() {
         HealthCheckResponseBuilder responseBuilder = HealthCheckResponse
-                .named("Projects Datasource connection health check");
+                .named("Timers Datasource connection health check");
         try {
-            List<Project> projects = service.findAll();
+            List<Timer> projects = service.findAll();
             responseBuilder.withData("Number of projects in the database", projects.size()).up();
         } catch (IllegalStateException e) {
             responseBuilder.down();
