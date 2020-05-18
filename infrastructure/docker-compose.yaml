@@ -24,15 +24,23 @@ services:
       KEYCLOAK_PASSWORD: plop
       DB_PASSWORD: keycloak
     volumes:
-      - ./keycloak/realm.export.json:/opt/jboss/keycloak/import-realm.json
+      # - /some/dir/my-script.cli:/opt/jboss/startup-scripts/my-script.cli
+      - ./keycloak/realm-export.json:/opt/jboss/keycloak/import-realm.json
       # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
       #JDBC_PARAMS: "ssl=true"
     #           env_file:
     #               - /home/debian/.secret/auth/kc.env
     #            volumes:
     #                - "/home/debian/cert/app.elizay.com/keycloak/:/etc/x509/https"
+    command:
+      - "-b 0.0.0.0"
+      - "-Dkeycloak.migration.action=import"
+      - "-Dkeycloak.migration.provider=singleFile"
+      - "-Dkeycloak.migration.file=/opt/jboss/keycloak/import-realm.json"
+      - "-Dkeycloak.migration.strategy=IGNORE_EXISTING"
     ports:
-      - 8443:8443
+      - 8080:8080
+      # - 8443:8443
     depends_on:
       - database
 
