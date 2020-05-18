@@ -7,12 +7,13 @@ Application that allows to track time to projects. It's about microservices comm
 - [User Profile REST API](./rest-user/README.md): Allows CRUD operations on User profile which are stored in a Postgres database  [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=timounet_timeflies_rest-users&metric=alert_status)](https://sonarcloud.io/dashboard?id=timounet_timeflies_rest-users) ![Rest User Profile CI](https://github.com/timounet/timeflies/workflows/Rest%20User%20Profile%20CI/badge.svg?branch=develop)
 - [Project REST API](./rest-project/README.md): Allows CRUD operations on Project which are stored in a Postgres database [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=timounet_timeflies_rest-project&metric=alert_status)](https://sonarcloud.io/dashboard?id=timounet_timeflies_rest-project) ![Rest Project CI](https://github.com/timounet/timeflies/workflows/Rest%20Project%20CI/badge.svg?branch=develop)
 - [Timer REST API](./rest-timer/README.md): Allows CRUD operations on Project times (to start / stop a clock timer) which are stored in a Postgres database 
-- [API Gateway ](./rest-gw/README.md) This REST API invokes every micro service APIs. It implements security with keycloak 
+- [API Gateway ](./rest-gw-web/README.md) This REST API invokes every micro service APIs. It implements security with keycloak 
 - [Time flies UI](./ui/README.md): a reactJs application allowing you to pick up a project and play timers. The TimeFlies UI is exposed via nginx? and invokes the Gateway REST API. It will be keycloak UI either, for login, registration, forgot password ans logout
 - [KeyCloak](./auth/README.md): authentication service having dedicated postgres database
 - [Prometheus supervisor](./supervisor/README.md): Micro Service supervisor polling micro services health and metrics
 - [Web router](./router/README.md): Nginx web router / reverse proxy / load balancer / application entry point. Will host https
 - [Statistics](./event-statistics/README.md): Each timer is asynchronously sent (via Kafka) to the Statistics microservice. It has a HTML + JQuery UI displaying all the statistics.
+- [react-ff](./react-ff/README.md) : Sample react project interacting with keycloak and rest-gw-web (for dev test)
 
 ## Artifacts
 ### DockerHub timefliesapp organization
@@ -25,7 +26,7 @@ Application that allows to track time to projects. It's about microservices comm
 ### Checking Ports
 In development, we will use several ports. Just make sure the following ports are free so you don’t run into any conflicts
 ````shell script
-$ lsof -i tcp:8080    // UI
+$ lsof -i tcp:3000    // UI
 $ lsof -i tcp:8081    // GW api
 $ lsof -i tcp:8082    // Timer REST API
 $ lsof -i tcp:8083    // User REST API
@@ -34,9 +35,10 @@ $ lsof -i tcp:5432    // Postgres
 $ lsof -i tcp:9090    // Prometheus
 $ lsof -i tcp:2181    // Zookeeper
 $ lsof -i tcp:9092    // Kafka
-$ lsof -i tcp:8443    // Keycloak
+$ lsof -i tcp:8080    // Keycloak 8443
 $ lsof -i tcp:443     // nginx
 $ lsof -i tcp:80 ?    // nginx
+$ lsof -i tcp:3000 ?    // sample ui for keycloack test
 ````
 
 [see developer starter kit for more details](./doc/developer-starter-kit.md)

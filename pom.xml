@@ -30,6 +30,7 @@
         <module>rest-user</module>
         <module>rest-project</module>
         <module>rest-timer</module>
+        <module>rest-gw-web</module>
         <!--<module>ui</module>
         <module>event-statistics</module>-->
     </modules>
@@ -41,6 +42,7 @@
                 <module>rest-user</module>
                 <module>rest-project</module>
                 <module>rest-timer</module>
+                <module>rest-gw-web</module>
                 <!--<module>ui</module>
                 <module>event-statistics</module>-->
             </modules>
